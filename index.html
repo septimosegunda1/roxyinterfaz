@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Interactivo - Asistente Virtual del Futuro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00e5ff;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00e5ff, #4afbff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
+            to { text-shadow: 0 0 30px rgba(0, 229, 255, 0.8); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #00e5ff, #4afbff);
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.4);
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00e5ff;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: #ffffff;
+            color: #333;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #2d2d2d;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .robot-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .robot-card {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+            max-width: 600px;
+        }
+
+        .robot-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .robot-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .robot-image-container {
+            flex-shrink: 0;
+        }
+
+        .robot-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            animation: hover 4s ease-in-out infinite;
+        }
+
+        .robot-image:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes hover {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .robot-card:nth-child(2) .robot-image {
+            animation-delay: 2s;
+        }
+
+        .robot-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .robot-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2d2d2d;
+        }
+
+        .robot-info p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: #00e5ff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #00e5ff;
+        }
+
+        /* Prototype Section */
+        .prototype {
+            padding: 100px 0;
+            background: #ffffff;
+            color: #333;
+            text-align: center;
+        }
+
+        .prototype h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #2d2d2d;
+        }
+
+        .prototype-demo {
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prototype-button {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(45deg, #4afbff, #00e5ff);
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .prototype-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Coming Soon Section */
+        .coming-soon {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            text-align: center;
+        }
+
+        .coming-soon h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .chatbot-preview {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbot-placeholder {
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ffffff;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: #00e5ff;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #4afbff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .robot-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .robot-card:nth-child(even) {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🤖 RobotAI</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#prototipo">Prototipo</a></li>
+                <li><a href="#chatbot">Chatbot</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="floating-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+            <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 1s;"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1>El Futuro de la Interacción Humano-Robot</h1>
+            <p>Descubre nuestro revolucionario asistente virtual con expresiones faciales realistas y capacidades de conversación avanzadas.</p>
+            <a href="#sobre" class="cta-button">Conocer Más</a>
+        </div>
+    </section>
+
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Conoce a Nuestro Robot</h2>
+                    <p>Este proyecto representa la vanguardia en inteligencia artificial conversacional. Nuestro robot no solo comprende y responde a tus preguntas, sino que también expresa emociones a través de su rostro animado.</p>
+                    <p><strong>Características principales:</strong></p>
+                    <p>• Expresiones faciales dinámicas y realistas</p>
+                    <p>• Seguimiento ocular inteligente</p>
+                    <p>• Respuestas emocionales contextuales</p>
+                    <p>• Interfaz de conversación natural</p>
+                    <p>Dedicado a mejorar la experiencia de interacción entre humanos y sistemas de IA, creando conexiones más naturales y empáticas.</p>
+                </div>
+                
+                <div class="robot-showcase">
+                    <div class="robot-card">
+                        <div class="robot-image-container">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Robot Humanoide" class="robot-image" style="background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2NjY2NjYyIgc3Ryb2tlLXdpZHRoPSIyIj4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iNzAiIHI9IjMwIi8+CjxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxMjAiIHJ4PSIyNSIgcnk9IjQwIi8+CjxyZWN0IHg9Ijc1IiB5PSI5MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjMwIiByeD0iNSIvPgo8cmVjdCB4PSIxMTUiIHk9IjkwIiB3aWR0aD0iMTAiIGhlaWdodD0iMzAiIHJ4PSI1Ii8+CjxlbGxpcHNlIGN4PSI4MCIgY3k9IjEyNSIgcng9IjgiIHJ5PSI2Ii8+CjxlbGxpcHNlIGN4PSIxMjAiIGN5PSIxMjUiIHJ4PSI4IiByeT0iNiIvPgo8cmVjdCB4PSI5MCIgeT0iMTYwIiB3aWR0aD0iMjAiIGhlaWdodD0iMzAiIHJ4PSIxMCIvPgo8L2c+CjxjaXJjbGUgY3g9IjkwIiBjeT0iNjUiIHI9IjQiIGZpbGw9IiMwMGU1ZmYiLz4KPGNpcmNsZSBjeD0iMTEwIiBjeT0iNjUiIHI9IjQiIGZpbGw9IiMwMGU1ZmYiLz4KPHBhdGggZD0iTTkwIDgwIFExMDAgODUgMTEwIDgwIiBzdHJva2U9IiMwMGU1ZmYiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K') center/contain no-repeat;">
+                        </div>
+                        <div class="robot-info">
+                            <h3>Robot Asistente Humanoide</h3>
+                            <p>Diseño ergonómico y amigable para interacción natural con humanos. Equipado con sensores avanzados y capacidades de movimiento.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="robot-card">
+                        <div class="robot-image-container">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Robot Compañero" class="robot-image" style="background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2NjY2NjYyIgc3Ryb2tlLXdpZHRoPSIyIj4KPGNpcmNsZSBjeD0iMTAwIiBjeT0iODAiIHI9IjQwIi8+CjxlbGxpcHNlIGN4PSIxMDAiIGN5PSIxNDAiIHJ4PSIzNSIgcnk9IjMwIi8+CjxlbGxpcHNlIGN4PSI2NSIgY3k9IjEyMCIgcng9IjEyIiByeT0iMjAiLz4KPGVsbGlwc2UgY3g9IjEzNSIgY3k9IjEyMCIgcng9IjEyIiByeT0iMjAiLz4KPGVsbGlwc2UgY3g9IjEwMCIgY3k9IjE3NSIgcng9IjMwIiByeT0iMTAiLz4KPC9nPgo8Y2lyY2xlIGN4PSI4NSIgY3k9Ijc1IiByPSI2IiBmaWxsPSIjMDBhOGQ0Ii8+CjxjaXJjbGUgY3g9IjExNSIgY3k9Ijc1IiByPSI2IiBmaWxsPSIjMDBhOGQ0Ii8+CjxwYXRoIGQ9Ik04MCA5NSBRMTAwIDEwNSAxMjAgOTUiIHN0cm9rZT0iIzAwYThkNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIzIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDBhOGQ0IiBmb250LXNpemU9IjEyIj7wn6SM77iPPC90ZXh0Pgo8L3N2Zz4K') center/contain no-repeat;">
+                        </div>
+                        <div class="robot-info">
+                            <h3>Robot Compañero Inteligente</h3>
+                            <p>Diseño compacto y adorable, perfecto como asistente personal. Interfaz emocional avanzada con expresiones dinámicas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="caracteristicas">
+        <div class="container">
+            <h2>Características Innovadoras</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>Seguimiento Ocular</h3>
+                    <p>Los ojos del robot siguen tu movimiento, creando una experiencia de interacción más natural y realista.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">😊</div>
+                    <h3>Expresiones Dinámicas</h3>
+                    <p>Parpadeo automático, sonrisas, guiños y múltiples expresiones faciales que reflejan emociones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎤</div>
+                    <h3>Comunicación Visual</h3>
+                    <p>Animaciones sincronizadas con el habla y burbujas de diálogo interactivas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prototype" id="prototipo">
+        <div class="container">
+            <h2>Prototipo de Cara Animada</h2>
+            <p>Experimenta la magia de nuestro robot en acción. Ve cómo responde, parpadea y expresa emociones en tiempo real.</p>
+            
+            <div class="prototype-demo">
+                <h3 style="color: #00e5ff; margin-bottom: 20px;">Demo Interactiva</h3>
+                <p style="color: #ffffff; margin-bottom: 30px;">Haz clic en el botón para ver el prototipo de la cara animada del robot con todas sus expresiones y movimientos.</p>
+                
+                <button class="prototype-button" onclick="openPrototype()">
+                    🤖 Ver Prototipo de Cara
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="coming-soon" id="chatbot">
+        <div class="container">
+            <h2>Chatbot Inteligente - Próximamente</h2>
+            <p>Estamos trabajando en la integración completa del chatbot. ¡Pronto podrás tener conversaciones reales con nuestro robot!</p>
+            
+            <div class="chatbot-preview">
+                <h3>Área de Chatbot</h3>
+                <div class="chatbot-placeholder">
+                    <div>
+                        <p>🚀 Chatbot en Desarrollo</p>
+                        <p style="margin-top: 10px; font-size: 1rem; opacity: 0.7;">
+                            Aquí se integrará tu sistema de chatbot personalizado
+                        </p>
+                        <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.5;">
+                            • Procesamiento de lenguaje natural<br>
+                            • Respuestas contextualmente relevantes<br>
+                            • Integración con expresiones faciales<br>
+                            • Memoria conversacional
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <p>&copy; 2025 RobotAI. Todos los derechos reservados.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#" title="Twitter">📱</a>
+                    <a href="#" title="LinkedIn">💼</a>
+                    <a href="#" title="GitHub">⚡</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Function to open prototype in new window
+        function openPrototype() {
+            const prototypeWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+            
+            if (prototypeWindow) {
+                prototypeWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                      <meta charset="UTF-8" />
+                      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                      <title>Robot Animado Expresivo - Prototipo</title>
+                      <style>
+                        * {
+                          margin: 0;
+                          padding: 0;
+                          box-sizing: border-box;
+                        }
+
+                        body {
+                          background-color: #1a1a1a;
+                          height: 100vh;
+                          overflow: hidden;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          font-family: 'Segoe UI', sans-serif;
+                        }
+
+                        .robot-face {
+                          width: 100vw;
+                          height: 100vh;
+                          display: flex;
+                          flex-direction: column;
+                          align-items: center;
+                          justify-content: center;
+                          position: relative;
+                          transform: scale(1.2);
+                        }
+
+                        .eyes {
+                          display: flex;
+                          justify-content: center;
+                          gap: 50px;
+                          margin-bottom: 60px;
+                        }
+
+                        .eye {
+                          width: 160px;
+                          height: 120px;
+                          background: linear-gradient(to top, #4afbff, #00b8d4);
+                          border-radius: 80px 80px 30px 30px;
+                          box-shadow: 0 0 60px #00e5ff;
+                          transition: all 0.3s ease-in-out;
+                          transform-origin: center;
+                          position: relative;
+                          overflow: hidden;
+                        }
+
+                        .pupil {
+                          width: 40px;
+                          height: 40px;
+                          background: #111;
+                          border-radius: 50%;
+                          position: absolute;
+                          top: 50%;
+                          left: 50%;
+                          transform: translate(-50%, -50%);
+                          transition: all 0.1s ease-out;
+                          box-shadow: 0 0 10px rgba(0,0,0,0.5);
+                        }
+
+                        .pupil::after {
+                          content: '';
+                          position: absolute;
+                          top: 20%;
+                          left: 20%;
+                          width: 10px;
+                          height: 10px;
+                          background: #fff;
+                          border-radius: 50%;
+                          opacity: 0.8;
+                        }
+
+                        .mouth-container {
+                          width: 200px;
+                          height: 60
